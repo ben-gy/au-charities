@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # The Data Pipeline commits new data via GITHUB_TOKEN, and pushes made with
+  # that token don't trigger other workflows — so a data update would never
+  # redeploy on its own. Run after Data Pipeline completes to pick up new data.
+  workflow_run:
+    workflows: ["Data Pipeline"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -16,6 +22,8 @@ concurrency:
 
 jobs:
   build:
+    # On workflow_run, only deploy if the upstream Data Pipeline succeeded.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

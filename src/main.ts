@@ -26,8 +26,6 @@ const state: AppState = {
 
 let store: DataStore | null = null;
 
-bootstrap();
-
 async function bootstrap() {
   renderShell();
   initGlossary(app);
@@ -446,3 +444,9 @@ function waitForCharities(): Promise<CharityRecord[]> {
 }
 
 const BRAND_SVG = `<svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="10" fill="#0f2a4a"/><path d="M32 14 L48 24 L48 38 C48 46 40 52 32 54 C24 52 16 46 16 38 L16 24 Z" fill="#0d7a7a" stroke="#fbfaf7" stroke-width="2"/><path d="M24 32 L30 38 L42 26" stroke="#fbfaf7" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// Start the app only after all module-level consts above (e.g. BRAND_SVG) are
+// initialized. renderShell() runs synchronously inside bootstrap() and reads
+// BRAND_SVG, so calling bootstrap() earlier hits its temporal dead zone and
+// throws "Cannot access 'BRAND_SVG' before initialization", blanking the page.
+bootstrap();
