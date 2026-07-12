@@ -63,7 +63,7 @@ export function renderOverview(store: DataStore): string {
           ${stateRows
             .map(
               ([code, v]) => `
-            <div class="hbar-row" data-jump-state="${code}">
+            <div class="hbar-row" data-jump-state="${code}" data-tip="${code}: ${formatNumber(v.count)} charities (${((v.count / agg.totalCharities) * 100).toFixed(1)}% of all) — click to filter search">
               <div class="lbl">${code}</div>
               <div class="bar"><div class="fill" style="width:${(v.count / maxStateCount) * 100}%"></div></div>
               <div class="val">${formatNumber(v.count)}</div>
@@ -82,7 +82,7 @@ export function renderOverview(store: DataStore): string {
             .slice(0, 10)
             .map(
               ([key, v]) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${purposeLabels[key] || key}: ${formatNumber(v.count)} charities (${((v.count / agg.totalCharities) * 100).toFixed(1)}% of all)">
               <div class="lbl">${purposeLabels[key] || key}</div>
               <div class="bar"><div class="fill" style="width:${(v.count / maxPurpose) * 100}%"></div></div>
               <div class="val">${formatNumber(v.count)}</div>

@@ -1,5 +1,5 @@
 import type { DataStore } from '../data';
-import { formatMoney, formatNumber } from '../utils/format';
+import { formatMoney, formatMoneyExact, formatNumber } from '../utils/format';
 import { gloss } from '../glossaryTooltip';
 
 export function renderSectors(store: DataStore): string {
@@ -38,7 +38,8 @@ export function renderSectors(store: DataStore): string {
                 const intensity = Math.sqrt(v / maxCell);
                 const bg = intensity > 0 ? `rgba(13, 122, 122, ${0.05 + intensity * 0.85})` : 'var(--bg-surface)';
                 const color = intensity > 0.5 ? 'white' : 'var(--text-primary)';
-                return `<td class="cell" style="background:${bg};color:${color}" title="${pLabels[p] || p} × ${bLabels[b] || b}: ${formatNumber(v)} charities">${v > 0 ? formatNumber(v) : ''}</td>`;
+                const tip = `${pLabels[p] || p} × ${bLabels[b] || b}: ${formatNumber(v)} charities`;
+                return `<td class="cell" style="background:${bg};color:${color}" data-tip="${tip}" aria-label="${tip}">${v > 0 ? formatNumber(v) : ''}</td>`;
               })
               .join('')}
           </tr>
@@ -78,7 +79,7 @@ export function renderSectors(store: DataStore): string {
           ${byPurp
             .map(
               ([key, v]) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${pLabels[key] || key}: ${formatMoneyExact(v.revenue)} total 2023 revenue across ${formatNumber(v.count)} charities">
               <div class="lbl">${pLabels[key] || key}</div>
               <div class="bar"><div class="fill" style="width:${(v.revenue / maxRev) * 100}%"></div></div>
               <div class="val">${formatMoney(v.revenue)}</div>
@@ -98,7 +99,7 @@ export function renderSectors(store: DataStore): string {
             .sort((a, b) => b[1].donations - a[1].donations)
             .map(
               ([key, v]) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${pLabels[key] || key}: ${formatMoneyExact(v.donations)} donations &amp; bequests in 2023">
               <div class="lbl">${pLabels[key] || key}</div>
               <div class="bar"><div class="fill" style="width:${(v.donations / maxDon) * 100}%;background:var(--accent-gold)"></div></div>
               <div class="val">${formatMoney(v.donations)}</div>
@@ -117,7 +118,7 @@ export function renderSectors(store: DataStore): string {
             .slice(0, 16)
             .map(
               ([key, v]) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${bLabels[key] || key}: ${formatNumber(v.count)} charities list this beneficiary group">
               <div class="lbl">${bLabels[key] || key}</div>
               <div class="bar"><div class="fill" style="width:${(v.count / maxBeneCount) * 100}%;background:var(--accent-secondary)"></div></div>
               <div class="val">${formatNumber(v.count)}</div>

@@ -1,6 +1,6 @@
 import type { CharityRecord } from '../types';
 import type { DataStore } from '../data';
-import { formatMoney, formatNumber, sizeShort } from '../utils/format';
+import { formatMoney, formatMoneyExact, formatNumber, sizeShort } from '../utils/format';
 import { applyFilters, type FilterState } from '../utils/search';
 
 const STATES = ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
@@ -113,7 +113,7 @@ export function renderSearchRows(records: CharityRecord[], store: DataStore, sta
           <td class="name-cell">${escapeHtml(c.name)}<span class="city">${escapeHtml(c.city || '')}${c.postcode ? ' · ' + c.postcode : ''}</span></td>
           <td><span class="pill state">${c.state || '—'}</span></td>
           <td><span class="pill size-${c.size}">${sizeShort(c.size)}</span></td>
-          <td class="num">${c.hasAis ? formatMoney(c.revenueK * 1000) : '<span style="color:var(--text-muted)">no AIS</span>'}</td>
+          <td class="num" ${c.hasAis ? `data-tip="2023 total revenue: ${formatMoneyExact(c.revenueK * 1000)} (rounded to nearest $1k)"` : 'data-tip="No 2023 Annual Information Statement lodged — no financials available"'}>${c.hasAis ? formatMoney(c.revenueK * 1000) : '<span style="color:var(--text-muted)">no AIS</span>'}</td>
           <td>${purposes} ${more}</td>
         </tr>
       `;

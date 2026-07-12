@@ -1,5 +1,5 @@
 import type { DataStore } from '../data';
-import { formatMoney } from '../utils/format';
+import { formatMoney, formatMoneyExact, formatPercent } from '../utils/format';
 import { gloss } from '../glossaryTooltip';
 
 interface Node {
@@ -73,7 +73,7 @@ export function renderFlows(store: DataStore): string {
             .sort((a, b) => b.value - a.value)
             .map(
               (s) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${s.label}: ${formatMoneyExact(s.value)} (${formatPercent(s.value / sourceTotal, 1)} of revenue)">
               <div class="lbl">${s.label}</div>
               <div class="bar"><div class="fill" style="width:${(s.value / sourceTotal) * 100}%;background:${s.color}"></div></div>
               <div class="val">${formatMoney(s.value)}</div>
@@ -92,7 +92,7 @@ export function renderFlows(store: DataStore): string {
             .sort((a, b) => b.value - a.value)
             .map(
               (u) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${u.label}: ${formatMoneyExact(u.value)} (${formatPercent(u.value / useTotal, 1)} of expenses)">
               <div class="lbl">${u.label}</div>
               <div class="bar"><div class="fill" style="width:${(u.value / useTotal) * 100}%;background:${u.color}"></div></div>
               <div class="val">${formatMoney(u.value)}</div>
@@ -162,17 +162,17 @@ function buildSankeySvg(sources: Node[], uses: Node[], links: Link[]): string {
         L ${x1} ${y1 + linkH_u}
         C ${mid} ${y1 + linkH_u}, ${mid} ${y0 + linkH_s}, ${x0} ${y0 + linkH_s}
         Z`;
-      return `<path d="${path}" fill="${src.color}" opacity="0.22" data-link="${l.from}-${l.to}" data-value="${l.value}">
-        <title>${formatLink(l, src.label, dst.label)}</title>
-      </path>`;
+      const tip = formatLink(l, src.label, dst.label);
+      return `<path d="${path}" fill="${src.color}" opacity="0.22" data-link="${l.from}-${l.to}" data-value="${l.value}" data-tip="${tip}" aria-label="${tip}"></path>`;
     })
     .join('');
 
   const sNodes = sources
     .map((s) => {
       const p = sPositions[s.key];
+      const tip = `${p.label}: ${formatMoneyExact(s.value)} (${formatPercent(s.value / sTotal, 1)} of revenue)`;
       return `
-      <rect x="${colX_L}" y="${p.y}" width="${NODE_W}" height="${p.h}" fill="${p.color}" rx="2"/>
+      <rect x="${colX_L}" y="${p.y}" width="${NODE_W}" height="${p.h}" fill="${p.color}" rx="2" data-tip="${tip}" aria-label="${tip}"/>
       <text x="${colX_L - 10}" y="${p.y + p.h / 2}" text-anchor="end" dominant-baseline="middle" fill="#1a1f2e" font-size="12" font-family="-apple-system,Inter,sans-serif">
         <tspan font-weight="600">${p.label}</tspan>
         <tspan x="${colX_L - 10}" dy="14" fill="#4a5160" font-family="SF Mono,monospace">${formatMoney(s.value)}</tspan>
@@ -183,8 +183,9 @@ function buildSankeySvg(sources: Node[], uses: Node[], links: Link[]): string {
   const uNodes = uses
     .map((u) => {
       const p = uPositions[u.key];
+      const tip = `${p.label}: ${formatMoneyExact(u.value)} (${formatPercent(u.value / uTotal, 1)} of expenses)`;
       return `
-      <rect x="${colX_R}" y="${p.y}" width="${NODE_W}" height="${p.h}" fill="${p.color}" rx="2"/>
+      <rect x="${colX_R}" y="${p.y}" width="${NODE_W}" height="${p.h}" fill="${p.color}" rx="2" data-tip="${tip}" aria-label="${tip}"/>
       <text x="${colX_R + NODE_W + 10}" y="${p.y + p.h / 2}" dominant-baseline="middle" fill="#1a1f2e" font-size="12" font-family="-apple-system,Inter,sans-serif">
         <tspan font-weight="600">${p.label}</tspan>
         <tspan x="${colX_R + NODE_W + 10}" dy="14" fill="#4a5160" font-family="SF Mono,monospace">${formatMoney(u.value)}</tspan>
@@ -200,5 +201,5 @@ function buildSankeySvg(sources: Node[], uses: Node[], links: Link[]): string {
 }
 
 function formatLink(l: Link, srcLabel: string, dstLabel: string): string {
-  return `${srcLabel} → ${dstLabel}: ${formatMoney(l.value)}`;
+  return `${srcLabel} → ${dstLabel}: ${formatMoneyExact(Math.round(l.value))}`;
 }

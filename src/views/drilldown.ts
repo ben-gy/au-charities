@@ -1,6 +1,6 @@
 import type { CharityRecord, Financials } from '../types';
 import type { DataStore } from '../data';
-import { formatAbn, formatMoney, formatNumber, formatPercent, sizeName } from '../utils/format';
+import { formatAbn, formatMoney, formatMoneyExact, formatNumber, formatPercent, sizeName } from '../utils/format';
 import { gloss } from '../glossaryTooltip';
 
 export function renderDrilldown(c: CharityRecord, store: DataStore, fin: Financials | undefined): string {
@@ -77,7 +77,7 @@ export function renderDrilldown(c: CharityRecord, store: DataStore, fin: Financi
         <h3>Where the money came from</h3>
         <div class="hbar-list">
           ${sources.map((s) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${s.label}: ${formatMoneyExact(s.value)} (${formatPercent(s.value / sTotal, 1)} of income)">
               <div class="lbl">${s.label}</div>
               <div class="bar"><div class="fill" style="width:${(s.value / sTotal) * 100}%;background:${s.color}"></div></div>
               <div class="val">${formatMoney(s.value)}</div>
@@ -90,7 +90,7 @@ export function renderDrilldown(c: CharityRecord, store: DataStore, fin: Financi
         <h3>Where the money went</h3>
         <div class="hbar-list">
           ${uses.map((u) => `
-            <div class="hbar-row">
+            <div class="hbar-row" data-tip="${u.label}: ${formatMoneyExact(u.value)} (${formatPercent(u.value / uTotal, 1)} of expenses)">
               <div class="lbl">${u.label}</div>
               <div class="bar"><div class="fill" style="width:${(u.value / uTotal) * 100}%;background:${u.color}"></div></div>
               <div class="val">${formatMoney(u.value)}</div>

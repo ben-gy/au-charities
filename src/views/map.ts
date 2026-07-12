@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import type { DataStore } from '../data';
 import { STATE_CENTROIDS } from '../data/states';
-import { formatMoney, formatNumber } from '../utils/format';
+import { formatMoney, formatMoneyExact, formatNumber } from '../utils/format';
 
 let map: L.Map | null = null;
 let layerGroup: L.LayerGroup | null = null;
@@ -72,6 +72,10 @@ export function attachMap(store: DataStore, onClick: (state: string) => void) {
       fillColor: '#0d7a7a',
       fillOpacity: 0.45,
     });
+    marker.bindTooltip(
+      `${centroid.name}: ${formatNumber(v.count)} charities · ${v.perCapita.toFixed(1)} per 100k · ${formatMoney(v.revenue)} 2023 revenue`,
+      { direction: 'top', sticky: true },
+    );
     marker.bindPopup(
       `<div style="font-family:-apple-system,Inter,sans-serif">
         <strong style="color:#0f2a4a">${centroid.name}</strong><br>
@@ -105,7 +109,7 @@ export function attachMap(store: DataStore, onClick: (state: string) => void) {
     densityEl.innerHTML = `<div class="hbar-list">${rows
       .map(
         ([code, v]) => `
-        <div class="hbar-row" data-jump-state="${code}" style="cursor:pointer">
+        <div class="hbar-row" data-jump-state="${code}" style="cursor:pointer" data-tip="${code}: ${v.perCapita.toFixed(1)} charities per 100,000 residents (${formatNumber(v.count)} charities) — click to filter search">
           <div class="lbl">${code}</div>
           <div class="bar"><div class="fill" style="width:${(v.perCapita / max) * 100}%"></div></div>
           <div class="val">${v.perCapita.toFixed(0)}</div>
@@ -126,7 +130,7 @@ export function attachMap(store: DataStore, onClick: (state: string) => void) {
     revEl.innerHTML = `<div class="hbar-list">${rows
       .map(
         ([code, v]) => `
-        <div class="hbar-row">
+        <div class="hbar-row" data-tip="${code}: ${formatMoneyExact(v.revenue)} total 2023 revenue">
           <div class="lbl">${code}</div>
           <div class="bar"><div class="fill" style="width:${(v.revenue / max) * 100}%;background:var(--accent-secondary)"></div></div>
           <div class="val">${formatMoney(v.revenue)}</div>

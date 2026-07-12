@@ -1,6 +1,6 @@
 import type { DataStore } from '../data';
 import type { LeaderboardRow } from '../types';
-import { formatMoney, formatNumber, formatPercent, sizeShort } from '../utils/format';
+import { formatMoney, formatMoneyExact, formatNumber, formatPercent, sizeShort } from '../utils/format';
 import { gloss } from '../glossaryTooltip';
 
 interface LBSpec {
@@ -9,6 +9,12 @@ interface LBSpec {
   subtitle: string;
   format: (v: number) => string;
   gloss?: string;
+}
+
+/** Exact (unabbreviated) value for hover tooltips. */
+function exactValue(spec: LBSpec, v: number): string {
+  if (spec.format === formatMoney) return formatMoneyExact(v);
+  return spec.format(v);
 }
 
 const SPECS: LBSpec[] = [
@@ -54,7 +60,7 @@ function renderLb(spec: LBSpec, rows: LeaderboardRow[]): string {
           ${top
             .map(
               (r, i) => `
-            <tr data-charity="${r.slug}" data-abn="${r.abn}">
+            <tr data-charity="${r.slug}" data-abn="${r.abn}" data-tip="${escapeHtml(r.name)} — ${escapeHtml(spec.title)}: ${exactValue(spec, r.value)}">
               <td style="width:24px;color:var(--text-tertiary);font-family:var(--font-mono)">${i + 1}</td>
               <td class="name-cell">${escapeHtml(r.name)}<span class="city">${r.state || '—'} · <span class="pill size-${r.size}">${sizeShort(r.size)}</span></span></td>
               <td class="num">${spec.format(r.value)}</td>

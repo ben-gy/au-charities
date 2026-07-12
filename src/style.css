@@ -467,6 +467,24 @@ input:focus-visible, select:focus-visible {
   font-size: var(--font-size-base);
 }
 
+/* ── Hover tooltip ([data-tip]) ────────────────────────────────────────── */
+.hover-tip {
+  position: fixed;
+  z-index: 1200; /* above glossary tooltip (1000) and all Leaflet panes */
+  max-width: 300px;
+  padding: 0.4rem 0.6rem;
+  background: var(--accent-secondary);
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(15, 42, 74, 0.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 100ms ease;
+}
+.hover-tip.visible { opacity: 1; }
+
 /* ── Modal ─────────────────────────────────────────────────────────────── */
 .modal-backdrop {
   position: fixed;

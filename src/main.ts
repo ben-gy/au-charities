@@ -2,6 +2,7 @@ import './style.css';
 import { loadCharities, loadCore, loadFinancials, type DataStore } from './data';
 import type { CharityRecord, Financials } from './types';
 import { initGlossary } from './glossaryTooltip';
+import { initTooltip } from './tooltip';
 import { renderOverview } from './views/overview';
 import { renderSearch, renderSearchRows, defaultSearchState, type SearchState } from './views/search';
 import { renderLeaderboards } from './views/leaderboards';
@@ -29,6 +30,7 @@ let store: DataStore | null = null;
 async function bootstrap() {
   renderShell();
   initGlossary(app);
+  initTooltip();
 
   try {
     store = await loadCore();
