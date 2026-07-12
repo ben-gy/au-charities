@@ -394,7 +394,7 @@ function openAbout() {
       <p>The 2023 figures are the most recent year for which the ACNC has published a complete dataset. We do not include the 2024 AIS until the ACNC publishes it.</p>
 
       <h3>No tracking</h3>
-      <p>No analytics. No cookies. No third-party fonts. Built as a static site on GitHub Pages.</p>
+      <p>No cookies, no fingerprinting, no third-party fonts. The only analytics is Cloudflare Web Analytics — anonymous, cookie-less page-view counts; no personal data, no cross-site tracking. Built as a static site on GitHub Pages.</p>
 
       <h3>For corrections</h3>
       <p>If you spot a data quality issue with a specific charity, the authoritative source is the ACNC register. We import their CSV monthly and don't edit individual records.</p>
