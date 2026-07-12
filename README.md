@@ -47,7 +47,7 @@ All data is from the ACNC's own public datasets. No edits, no editorial choices 
 - **Hosting:** GitHub Pages (static, no backend)
 - **Data:** GitHub Actions pipeline downloads ACNC CSVs monthly, aggregates and joins on ABN, commits compact tabular JSON to `public/data/`
 
-No analytics, no cookies, no third-party fonts. Total client bundle: ~60 KB gzipped JS + 4 KB gzipped CSS.
+No cookies, no fingerprinting, no third-party fonts. Anonymous, cookie-less page-view counts via Cloudflare Web Analytics — no personal data, no cross-site tracking. Total client bundle: ~60 KB gzipped JS + 4 KB gzipped CSS.
 
 ## Local Development
 

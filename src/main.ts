@@ -117,7 +117,7 @@ function renderShell() {
           Data: ACNC Register + 2023 Annual Information Statement (data.gov.au). Updated monthly.
         </div>
         <div class="credits">
-          Built by <a href="https://benrichardson.dev/">benrichardson.dev</a>
+          Built by <a href="https://benrichardson.dev/">benrichardson.dev</a> · <a href="https://hub.benrichardson.dev" target="_blank" rel="noopener">more tools &amp; sites</a>
         </div>
       </div>
     </footer>
