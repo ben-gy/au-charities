@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://au-charities.benrichardson.dev/sitemap.xml
