@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Ben Richardson — https://benrichardson.dev
+// Additional terms under AGPL-3.0 section 7(b) apply; see ADDITIONAL-TERMS.md.
 // Join ACNC main register + 2023 AIS financials, write compact JSONs to public/data/.
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';

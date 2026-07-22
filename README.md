@@ -87,6 +87,17 @@ The frontend loads the small pre-aggregated files immediately for the overview, 
 
 The pipeline runs monthly via `.github/workflows/data-pipeline.yml`. The data files in `public/data/` are committed to the repository, so changes show up as diffs and the site can be served as a fully static asset.
 
-## License
+## license
 
-MIT. Data © Commonwealth of Australia (Australian Charities and Not-for-profits Commission) under CC BY 4.0.
+[GNU Affero General Public License v3.0 or later](./LICENSE), with an attribution
+requirement added under section 7(b) — see
+[ADDITIONAL-TERMS.md](./ADDITIONAL-TERMS.md).
+
+In short: you may run, modify, redistribute and even sell this, but if you
+distribute it — or run a modified version where other people can reach it — you
+have to publish your source under the same licence and keep the attribution. A
+separate commercial licence without those obligations is available on request:
+<hi@ben.gy>.
+
+Third-party components keep their own licences — see
+[THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md).
